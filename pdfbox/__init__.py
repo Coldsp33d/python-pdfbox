@@ -28,13 +28,6 @@ class PDFBox(object):
         Extract all text from PDF file.
     """
 
-    def _verify_md5(self, data, digest):
-        """
-        Verify MD5 checksum.
-        """
-        
-        return hashlib.md5(data).hexdigest() == digest
-
     def _get_pdfbox_path(self):
         """
         Return path to local copy of PDFBox jar file.
@@ -64,16 +57,6 @@ class PDFBox(object):
                     os.mkdir(cache_dir)
                 with open(pdfbox_path, 'wb') as f:
                     f.write(data)
-
-            r = urllib.request.urlopen(md5_url)
-            encoding = r.headers.get_content_charset('utf-8')
-            try:
-                md5 = r.read().decode(encoding).strip()
-            except:
-                raise RuntimeError('error retrieving md5sum')
-            else:
-                if not self._verify_md5(data, md5):
-                    raise RuntimeError('failed to verify md5sum')
 
         return pdfbox_path
     
